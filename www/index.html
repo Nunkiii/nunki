@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+
+<head>
+
+  <meta charset="utf-8"> 
+
+  <script src="sadira/js/community/async.js"></script>
+  <script src="sadira/js/community/bson.js"></script>
+  <script src="sadira/js/community/numeric-1.2.6.js"></script>
+  <script src="sadira/js/community/d3.v3.min.js"></script>
+  <script src="sadira/js/community/sha1.js"></script>
+  <script src="sadira/js/community/radixsort.min.js"></script>
+
+  <script src="sadira/js/utils.js"></script>
+  <script src="sadira/js/db.js"></script>
+  <script src="sadira/js/base_templates.js"></script>
+  <script src="sadira/js/db_basetypes.js"></script>
+  <script src="sadira/js/db_utils.js"></script>
+  <script src="sadira/js/datagram.js"></script> 
+  <script src="sadira/js/serializer.js"></script> 
+  <script src="sadira/js/dialog.js"></script> 
+  <script src="sadira/js/sadira.js"></script> 
+  <script src="sadira/js/colormap.js"></script>
+  <script src="sadira/js/glscreen.js"></script>
+    <script src="sadira/js/md5.js"></script>
+
+  <script src="sadira/js/menu.js"></script>
+
+
+  <script src="XD-1/js/community/gl-matrix.js"></script>
+  <script src="XD-1/js/community/fits.js"></script>
+
+  <script src="XD-1/js/xd1_templates.js"></script>
+  <script src="XD-1/js/xd1_sbig.js"></script>
+  <script src="XD-1/js/xd1_layer.js"></script>
+  <script src="XD-1/js/xd1.js"></script>
+
+  <script src="js/nunki_widget.js"></script>
+  <script src="js/nunki.js"></script>
+
+  
+  <style type="text/css"> @import url("sadira/css/db.css"); </style>  
+
+  <title>NunkI Observatory-Control</title>
+
+</head>
+
+<script>
+  
+ //window.addEventListener("load", function(){
+ sadira.listen("ready", function(){
+   var nk=tmaster.build_template("nunki");
+   create_ui({},nk);
+   attach_ui(nk, document.body);
+     
+   //});
+ });
+
+</script>
+
+
+
