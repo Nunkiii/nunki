@@ -4,17 +4,23 @@ var nunki_templates = {
 
     sbig_control : {
 	
-	//name : "SBIG Camera Control",
+	name : "Nunki",
+	subtitle : "Mobile robotic observatory",
 	type : "sbig_control",
-	ui_opts : { child_view_type : "divider", root : false},
+	ui_opts : {
+	    child_view_type : "div",
+	    child_classes : ["row"],
+	    root_classes : ["container-fluid"],
+	    name_node : "h1"
+	},
 	elements : {
 	    control : {
-		name : "SBIG Control panel", 
-		ui_opts : {child_view_type : "tabbed", name_node : "h2"},
+		name : "SBIG camera control panel", 
+		ui_opts : {child_view_type : "tabbed", root_classes : ["col-md-5"]},
 		elements : {
 		    server : {
 			name : "Camera server",
-		type : "template",
+			type : "template",
 			template_name : "sadira"
 		    },
 		    exposure : {
@@ -66,8 +72,8 @@ var nunki_templates = {
 	    },
 	    	    
 	    glwidget : {
-		//name : "GL Image display",
-		ui_opts : { child_view_type : "divider", divdir : true, split_frac : 25},
+		name : "WebGL Monitor",
+		ui_opts : { root_classes : ["col-md-7"]},
 		//type : "string", value : "Hello widget !",
 		elements : {
 		    glm : {
