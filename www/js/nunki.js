@@ -1,21 +1,93 @@
 
 
 var nunki_templates = {
+        
+    mount_control : {
+	type : "mount_control",
+	name : "Mount control",
+	ui_opts : {
+	    child_view_type : "div",
+	    child_classes : ["panel panel-default"],
+	    root_classes : ["container-fluid"],
+	    name_node : "h2"
+	},
+
+	elements : {
+	    config : {
+		elements : {
+		    server : {
+			name : "Mount server",
+			type : "template",
+			template_name : "sadira"
+		    },
+		}
+	    },
+	    status : {
+		name : "Mount status",
+		elements : {
+		    position : {
+			name : "Current position",
+			type : "sky_coords"
+			
+		    }
+		}
+	    },
+	    actions : {
+		name : "Actions",
+		
+		elements : {
+		
+		    goto_radec : {
+			name : "Goto Ra-Dec",
+			elements : {
+			    coords : {
+				name : "Coordinates",
+				type : "sky_coords",
+				value : [0,0]
+			    },
+			    go : {
+				name : "Goto",
+				type : "action"
+			    }
+			}
+		    },
+		    slew : {
+			name : "Slew telescope",
+			elements : {
+			    speed : {
+				name : "Slewing speed",
+				type : "double",
+				value : 0
+			    },
+			    arrow_pad : {
+				name : "Direction",
+				type : "arrow_pad"
+			    },
+			    slew : {
+				name : "Slew",
+				type : "action"
+			    }
+			    
+			    
+			}
+		    }
+		}
+	    }
+	}
+    },
 
     sbig_control : {
-	
-	name : "Nunki",
-	subtitle : "Mobile robotic observatory",
+	name : "SBIG camera", 
 	type : "sbig_control",
 	ui_opts : {
 	    child_view_type : "div",
 	    child_classes : ["row"],
 	    root_classes : ["container-fluid"],
-	    name_node : "h1"
+	    name_node : "h2"
 	},
 	elements : {
 	    control : {
-		name : "SBIG camera control panel", 
+		//name : "Control panel", 
 		ui_opts : {child_view_type : "tabbed", root_classes : ["col-md-5"]},
 		elements : {
 		    server : {
@@ -124,14 +196,22 @@ var nunki_templates = {
     
     
     nunki : {
+	name : "Nunki",
+	subtitle : "Mobile robotic observatory",
+	ui_opts : {child_view_type : "pills",
+		   child_classes : ["row"],
+		   root_classes : ["container-fluid"]
+		  },
 	//name : "Observatory control",
 	tpl_builder : "nunki",
 	elements : {
 	    db :{
 		//type : "string", value : "Hello DB !"
 		type : "template",template_name : "sbig_control",
+	    },
+	    mount : {
+		type : "template",template_name : "mount_control",
 	    }
-	    ,
 	}
     },
     
