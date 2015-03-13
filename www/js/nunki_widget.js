@@ -5,12 +5,12 @@
 
 template_ui_builders.nunki=function(ui_opts, nunki){
 
-
     console.log("NUNKI Build....");
+
     var glwidget = nunki.elements.glwidget;
     var glm = glwidget.elements.glm;
     var screen = glwidget.elements.screen;
-
+    
     var drawing_node=cc("div", screen.ui_root);
     drawing_node.add_class("drawing_node");
     glm.set_drawing_node(drawing_node);
