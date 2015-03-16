@@ -77,7 +77,7 @@ var nunki_templates = {
     },
 
     sbig_control : {
-	name : "SBIG camera", 
+	name : "SBIG camera interface", 
 	type : "sbig_control",
 	ui_opts : {
 	    child_view_type : "div",
@@ -86,21 +86,74 @@ var nunki_templates = {
 	    name_node : "h2"
 	},
 	elements : {
-	    control : {
-		//name : "Control panel", 
-		ui_opts : {child_view_type : "tabbed", root_classes : ["col-md-5"]},
+	    actions : {
+		//name : "Actions",
+		ui_opts : { child_classes : ["btn-group"]},
 		elements : {
+		}
+	    },
+
+	    
+
+	    control_panel : {
+		name : "Camera control panel", 
+		ui_opts : {child_view_type : "tabbed", root_classes : ["col-md-5"], child_classes : []},
+		elements : {
+		    cam_switch : {
+			name : "Initialization", subtitle : "Start/Stop the SBIG camera driver.", intro : "<p>The camera driver is a native C++ Node.js addon that runs on the Sadira Node.js server physically connected to the SBIG camera(s).</p> <p>It happens that bugs in the camera driver makes the firmware to crash, in such a case there is no other way than to plug/unplug the camera to force firmware reload trough USB and to restart the Node.js Sadira server processes.</p><p>More investigations are needed to find a suitable solution to the problem.</p>",
+			ui_opts : {root_classes : ["container-fluid"], child_classes : ["row"]},
+			elements : {
+			    start_camera : {
+				name : "Start camera", type : "action",
+				ui_opts : {
+				    item_classes : ["btn btn-primary"], fa_icon : "play",
+					    root_classes : ["col-xs-5 col-sm-5"]
+				},
+			    },
+			    status : {
+				name: "status : ",
+				type : "string",
+				ui_opts : {root_classes : ["col-xs-12 col-sm-7"], text_node : "div", label : true},
+			    }
+			}
+		    },
+		    
 		    server : {
-			name : "Camera server",
+			name : "Server",
+			subtitle : "Address of the Sadira Node.js server connected to the SBIG camera",
 			type : "template",
-			template_name : "sadira"
+			template_name : "sadira",
+			ui_opts : {root_classes : ["container-fluid"], child_classes : ["container-fluid"]},
 		    },
 		    exposure : {
 			name : "Exposure configuration",
 			elements : {
 			    exptime : { name : "Exposure time (s)", type : "double"},
 			    nexpo : { name : "Number of expos", type : "double"},
-			    binning : { name : "Binning" }
+			    binning : { name : "Binning" },
+			    start_exposure : {
+				name : "Start exposure",
+				type : "action",
+				ui_opts: {item_classes : ["btn btn-primary"]}
+			    },
+			    expo_status : {
+				
+				name : "Exposure status :",
+				
+				elements : {
+				    expo_progress : {
+					name : "Exposure progress",
+					type : "progress"
+				    },
+				    grab_progress : {
+					name : "Grab progress",
+					type : "progress"
+				    }
+				}
+
+			    }
+			    
+			    
 			}
 		    },
 		    cooling : {
@@ -112,39 +165,13 @@ var nunki_templates = {
 			    enable : {name : "Enable cooling", value : false, type : "bool", ui_opts : { type : "edit"} },
 			    setpoint : {name: "Temperature setpoint", value : 0.0, type : "double", ui_opts : { type : "edit"}}
 			}
-		    },
-		    actions : {
-			name : "Actions",
-			elements : {
-			    start_camera : { 
-				name : "Start camera", type : "action"
-			    },
-			    start_exposure : {
-				name : "Start exposure", 
-				type : "action",
-				elements : {
-				    expo_progress : {
-					name : "Exposure",
-					type : "progress"
-				    },
-				    grab_progress : {
-					name : "Exposure",
-					type : "progress"
-				    }
-				}
-				
-			    }
-			}
-		    },
-		    messages : {
-			name : "Info",
-			type : "text"
 		    }
 		}
 	    },
 	    	    
 	    glwidget : {
-		name : "WebGL Monitor",
+		name : "Camera monitor",
+		subtitle : "View the last image published by the camera driver.",
 		ui_opts : { root_classes : ["col-md-7"]},
 		//type : "string", value : "Hello widget !",
 		elements : {
@@ -205,7 +232,7 @@ var nunki_templates = {
 	//name : "Observatory control",
 	tpl_builder : "nunki",
 	elements : {
-	    db :{
+	    sbig :{
 		//type : "string", value : "Hello DB !"
 		type : "template",template_name : "sbig_control",
 	    },

@@ -7,13 +7,8 @@ template_ui_builders.nunki=function(ui_opts, nunki){
 
     console.log("NUNKI Build....");
 
-    var glwidget = nunki.elements.glwidget;
-    var glm = glwidget.elements.glm;
-    var screen = glwidget.elements.screen;
-    
-    var drawing_node=cc("div", screen.ui_root);
-    drawing_node.add_class("drawing_node");
-    glm.set_drawing_node(drawing_node);
+    var sbig=nunki.elements.sbig;
+
 
   //var browser = nunki.elements.db.elements.browser;
   //browser.glm=glm;
@@ -23,18 +18,38 @@ template_ui_builders.nunki=function(ui_opts, nunki){
 
 template_ui_builders.sbig_control=function(ui_opts, sbig){
 
-    var expo=sbig.elements.exposure.elements;
-    var cooling=sbig.elements.cooling.elements;
-    var actions=sbig.elements.actions.elements;
+
+    var glwidget=sbig.elements.glwidget;
+    var glm = glwidget.elements.glm;
+    var screen = glwidget.elements.screen;
+
+//    var actions=sbig.elements.actions.elements;
+
+    
+    
+    var control_panel=sbig.elements.control_panel.elements;
+    var server=control_panel.server;
+    var messages=server.elements.messages;
+    
+    var drawing_node=cc("div", screen.ui_root);
+    drawing_node.add_class("drawing_node");
+    glm.set_drawing_node(drawing_node);
+
+    var cooling=control_panel.cooling.elements;    
+    var expo=control_panel.exposure.elements;
+    var expo_status=expo.expo_status;
+    
     var exptime=expo.exptime;
     var nexpo=expo.nexpo;
-    var messages=sbig.elements.messages;
+
+    var cam_sw=control_panel.cam_switch.elements;
+    var start_camera=cam_sw.start_camera;
+    var cam_status=cam_sw.status;
+    var start_exposure=expo.start_exposure;
     
-    var start_camera=actions.start_camera;
-    var start_exposure=actions.start_exposure;
-    
-    var expo_progress=start_exposure.elements.expo_progress;
-    var grab_progress=start_exposure.elements.grab_progress;
+    var expo_progress=expo_status.elements.expo_progress;
+    var grab_progress=expo_status.elements.grab_progress;
+
     var enable_cooling=cooling.enable;
     var cooling_setpoint=cooling.setpoint;
     var temp=cooling.temp;
@@ -44,16 +59,77 @@ template_ui_builders.sbig_control=function(ui_opts, sbig){
     var temp_max_points=300;
     var temp_data=[];
 
-    var sadira=sbig.elements.server;
+    var sadira=server; 
+    
+    server.elements.url.set_value("ws://localhost");
 
-    var url=sadira.elements.url;
-    url.set_value("ws://localhost");
+
+    var cam_online=false;
+    
+    server.listen("socket_connect", function(){
+	var d= sadira.dialogs.create_dialog({ handler : "nunki.sbig"});
+	
+	d.listen("message", function(dgram){
+	    //console.log("Got message msg!" + JSON.stringify(dgram.header));
+	    var m=dgram.header.data;
+	    switch(m.id){
+	    case "init" :
+		if(è(m.online)) cam_online=m.online;
+		switch(m.type){
+		case "success":
+		case "error":
+		case "warning":
+		    if(cam_online){
+			start_camera.ui_opts.fa_icon="stop";
+			start_camera.set_title("Stop camera");
+		    }else{
+			start_camera.ui_opts.fa_icon="play";
+			start_camera.set_title("Start camera");
+		    }
+		    start_camera.disable(false);
+		    break;
+		case "info":
+		    console.log("Disable cam !!!!!!");
+		    start_camera.disable(true);
+		    break;
+		default: break;
+		};
+
+	    default :
+		cam_status.set_alert(m); break;
+	    }
+	    
+	});
+	
+	d.connect(function(error, init_dgram){
+	    if(error)
+		messages.append("Init data error= " + error + " init datagram = <pre> " + JSON.stringify(init_dgram,null,4));
+	    else{
+		
+		messages.append("Dialog handshake OK");
+		
+		start_camera.listen("click",function(){
+		    start_camera.disable();
+		    d.send_datagram({type : "sbig_request", request_type : cam_online? "shutdown" : "init"},null,function(error){
+			if(error){
+			    cam_status.set_alert({ type:"error", content : error});
+			    start_camera.disable(false);
+			}
+		    });
+		});
+		
+	    }
+	    
+	}); 
+
+	
+
+    });
+    
+    server.connect();
+    return;
     
     start_camera.listen("click", function(){
-	
-			
-
-	var d= sadira.dialogs.create_dialog({ handler : "sbig.drive"});
 	
 	d.listen("expo_progress", function(dgram){
 	    //console.log("EXPO Head" + JSON.stringify(dgram.header));
@@ -214,27 +290,6 @@ template_ui_builders.sbig_control=function(ui_opts, sbig){
 	};
 	
 
-	d.connect(function(error, init_dgram){
-	    if(error)
-		messages.append("Init data error= " + error + " init datagram = <pre> " + JSON.stringify(init_dgram,null,4));
-	    else{
-		
-		messages.append("Dialog handshake OK");
-		
-		start_camera.listen("click",function(){
-		    
-		    d.send_datagram({type : "start_camera"},null,function(error){
-			
-			if(error){
-			    messages.append("ERROR: "+error);
-			}
-		    });
-		});
-		
-	    }
-	    
-	    
-	}); 
 
     });
     
