@@ -18,7 +18,8 @@ template_ui_builders.nunki=function(ui_opts, nunki){
 
 template_ui_builders.sbig_control=function(ui_opts, sbig){
 
-
+    
+    
     var glwidget=sbig.elements.glwidget;
     var glm = glwidget.elements.glm;
     var screen = glwidget.elements.screen;
@@ -36,19 +37,28 @@ template_ui_builders.sbig_control=function(ui_opts, sbig){
     glm.set_drawing_node(drawing_node);
 
     var cooling=control_panel.cooling.elements;    
-    var expo=control_panel.exposure.elements;
-    var expo_status=expo.expo_status;
+    var expo_base=control_panel.exposure.elements;
+
+    var expo_setup=expo_base.setup.elements;
+    var expo=expo_base.exposure.elements;
+
+    var exptime=expo_setup.exptime;
+    var nexpo=expo_setup.nexpo;
+    var binning=expo_setup.binning;
+
     
-    var exptime=expo.exptime;
-    var nexpo=expo.nexpo;
+    var expo_status=expo.expo_status;
+    var start_exposure=expo.start_exposure;
+    
+    var expo_progress=expo_status.elements.expo_progress;
+    var grab_progress=expo_status.elements.grab_progress;    
 
     var cam_sw=control_panel.cam_switch.elements;
     var start_camera=cam_sw.start_camera;
     var cam_status=cam_sw.status;
-    var start_exposure=expo.start_exposure;
+
     
-    var expo_progress=expo_status.elements.expo_progress;
-    var grab_progress=expo_status.elements.grab_progress;
+
 
     var enable_cooling=cooling.enable;
     var cooling_setpoint=cooling.setpoint;

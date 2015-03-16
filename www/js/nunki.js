@@ -78,14 +78,14 @@ var nunki_templates = {
     },
 
     sbig_control : {
-	name : "SBIG camera interface", 
 	type : "sbig_control",
+	name : "SBIG camera",
 	ui_opts : {
 	    child_view_type : "div",
 	    child_classes : ["row"],
 	    root_classes : ["container-fluid"],
-	    name_node : "h2",
-	    icon : "/nunki/icons/sbig_cam.png"
+	    icon : "/nunki/icons/sbig_cam.png",
+	    render_name : false
 	},
 	elements : {
 	    actions : {
@@ -98,11 +98,14 @@ var nunki_templates = {
 	    
 
 	    control_panel : {
-		name : "Camera control panel", 
-		ui_opts : {child_view_type : "tabbed", root_classes : ["col-md-5"], child_classes : []},
+		name : "SBIG camera control panel", 
+		ui_opts : {
+		    child_view_type : "tabbed", root_classes : ["col-md-5"], child_classes : [],
+		    icon : "/nunki/icons/sbig_cam.png", name_node : "h2"
+		},
 		elements : {
 		    cam_switch : {
-			name : "Initialization", subtitle : "Start/Stop the SBIG camera driver.", intro : "<p>The camera driver is a native C++ Node.js addon that runs on the Sadira Node.js server physically connected to the SBIG camera(s).</p> <p>It happens that bugs in the camera driver makes the firmware to crash, in such a case there is no other way than to plug/unplug the camera to force firmware reload trough USB and to restart the Node.js Sadira server processes.</p><p>More investigations are needed to find a suitable solution to the problem.</p>",
+			name : "Initialization", subtitle : "Initialize/Release the SBIG camera driver.", intro : "<p>The camera driver is a native C++ Node.js addon that runs on the Sadira Node.js server physically connected to the SBIG camera(s).</p> <p>It happens that bugs in the camera driver makes the firmware to crash, in such a case there is no other way than to plug/unplug the camera to force firmware reload trough USB and to restart the Node.js Sadira server processes.</p><p>More investigations are needed to find a suitable solution to the problem.</p>",
 			ui_opts : {root_classes : ["container-fluid"], child_classes : ["row"]},
 			elements : {
 			    start_camera : {
@@ -122,35 +125,91 @@ var nunki_templates = {
 		    
 		    server : {
 			name : "Server",
-			subtitle : "Address of the Sadira Node.js server connected to the SBIG camera",
+			subtitle : "Sadira websocket server",
+			intro : "<p>Address of a Sadira Node.js server participating in the same cluster as at least one SBIG camera server</p><p>Usually, default setting (connecting to the same server as the one serving you these pages) is what you want.</p>",
 			type : "template",
 			template_name : "sadira",
 			ui_opts : {root_classes : ["container-fluid"], child_classes : ["container-fluid"]},
 		    },
 		    exposure : {
-			name : "Exposure configuration",
+			name : "Exposure",
 			elements : {
-
-			    exptime : { name : "Exposure time (s)", type : "double"},
-			    nexpo : { name : "Number of expos", type : "double"},
-			    binning : { name : "Binning" },
-			    start_exposure : {
-				name : "Start exposure",
-				type : "action",
-				ui_opts: {item_classes : ["btn btn-primary"], fa_icon : "circle"}
-			    },
-			    expo_status : {
-				
-				name : "Exposure status :",
-				
+			    setup : {
+				name : "Configuration",subtitle : "Set exposure parameters :",
+				ui_opts : {
+				    root_classes : ["container-fluid"],
+				    child_classes : ["row"],
+				    fa_icon : "wrench",
+				    editable : true
+				},
 				elements : {
-				    expo_progress : {
-					name : "Exposure progress",
-					type : "progress"
+				    exptime : {
+					name : "Exposure time", type : "double", intro : "<p>Exposure time in seconds.</p>",
+					default_value : 10, min : 0, max : 10000, step : .5,
+					ui_opts : {
+					    label : true,
+					    root_classes : ["col-sm-4"],
+					    
+					}
 				    },
-				    grab_progress : {
-					name : "Grab progress",
-					type : "progress"
+				    nexpo : {
+					name : "Number of expos", type : "double",
+					default_value : 1,
+					min : 1, max : 1024, step : 1,
+					ui_opts : {
+					    label : true,
+					    root_classes : ["col-sm-4"]
+					}
+				    },
+				    binning : {
+					name : "Binning",
+					type : "combo",
+					options : ["1X"],
+					default_value : "1X",
+					ui_opts : {
+					    label : true,
+					    root_classes : ["col-sm-4"]
+					}
+				    }
+				}
+			    },
+			    exposure : {
+				name : "Image acquisition",
+				ui_opts : {},
+				elements : {
+				    start_exposure : {
+					name : "Start exposure",
+					type : "action",
+					ui_opts: {item_classes : ["btn btn-primary"], fa_icon : "circle"}
+				    },
+				    expo_status : {
+					
+					name : "Exposure status :",
+					ui_opts : {
+					    root_classes :  ["row"],
+					    child_classes :["container-fluid"],
+					},
+					elements : {
+					    expo_progress : {
+						name : "Exposure progress",
+						type : "progress",
+						ui_opts : {
+						    root_classes :  ["row"],
+						    name_classes : ["col-md-4"], 
+						    item_classes :["col-md-8"],
+						}
+					    },
+					    grab_progress : {
+						name : "Grab progress",
+						type : "progress",
+						ui_opts : {
+						    root_classes :  ["row"],
+						    name_classes : ["col-md-4"], 
+						    item_classes :["col-md-8"],
+						}
+
+					    }
+					}
 				    }
 				}
 
@@ -228,7 +287,9 @@ var nunki_templates = {
     nunki : {
 	name : "Nunki",
 	subtitle : "Mobile robotic observatory",
-	intro : "<p>The <strong>Nunki observatory</strong> will be an easily transportable robotic observatory fully operable trough Web '3.0' interfaces.</p> <p>It will be dedicated to bring computerized astronomy to a large spectrum of public, from children groups to research students.</p>",
+	intro : "<p>The <strong>Nunki observatory</strong> will be a transportable robotic observatory fully controlled trough web interfaces, making use of the latest technologies available.</p> <p>It will be dedicated to help bringing computerized astronomy to a large spectrum of interested and curious public, from children groups, research students or retired people.</p>",
+
+//<p>The project homepage will be available soon at <a href='http://www.nunki-observatory.net'>www.nunki-observatory.net</a>.</p>",
 	ui_opts : {child_view_type : "pills",
 		   child_classes : ["row"],
 		   root_classes : ["container-fluid"]
@@ -243,6 +304,18 @@ var nunki_templates = {
 	    mount : {
 		type : "template",template_name : "mount_control",
 
+	    },
+	    filter_wheel : {
+		name :"Filter wheel"
+	    },
+	    spectro : {
+		name :"Spectrograph"
+	    },
+	    meteo : {
+		name : "Meteo"
+	    },
+	    dome : {
+		name : "Dome"
 	    }
 	}
     },
