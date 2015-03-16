@@ -287,7 +287,7 @@ var nunki_templates = {
     nunki : {
 	name : "Nunki",
 	subtitle : "Mobile robotic observatory",
-	intro : "<p>The <strong>Nunki observatory</strong> will be a transportable robotic observatory fully controlled trough web interfaces, making use of the latest technologies available.</p> <p>It will be dedicated to help bringing computerized astronomy to a large spectrum of interested and curious public, from children groups, research students or retired people.</p>",
+	intro : "<p>The <strong>Nunki observatory</strong> will be a transportable robotic observatory fully controlled trough web interfaces, making use of the latest technologies available.</p> <p>It will be dedicated to help bringing computerized astronomy to a large spectrum of interested and curious public, from children groups, research students to retired people.</p>",
 
 //<p>The project homepage will be available soon at <a href='http://www.nunki-observatory.net'>www.nunki-observatory.net</a>.</p>",
 	ui_opts : {child_view_type : "pills",
