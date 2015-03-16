@@ -9,7 +9,8 @@ var nunki_templates = {
 	    child_view_type : "div",
 	    child_classes : ["panel panel-default"],
 	    root_classes : ["container-fluid"],
-	    name_node : "h2"
+	    name_node : "h2",
+	    icon : "/nunki/icons/mount.png",
 	},
 
 	elements : {
@@ -83,7 +84,8 @@ var nunki_templates = {
 	    child_view_type : "div",
 	    child_classes : ["row"],
 	    root_classes : ["container-fluid"],
-	    name_node : "h2"
+	    name_node : "h2",
+	    icon : "/nunki/icons/sbig_cam.png"
 	},
 	elements : {
 	    actions : {
@@ -128,13 +130,14 @@ var nunki_templates = {
 		    exposure : {
 			name : "Exposure configuration",
 			elements : {
+
 			    exptime : { name : "Exposure time (s)", type : "double"},
 			    nexpo : { name : "Number of expos", type : "double"},
 			    binning : { name : "Binning" },
 			    start_exposure : {
 				name : "Start exposure",
 				type : "action",
-				ui_opts: {item_classes : ["btn btn-primary"]}
+				ui_opts: {item_classes : ["btn btn-primary"], fa_icon : "circle"}
 			    },
 			    expo_status : {
 				
@@ -225,6 +228,7 @@ var nunki_templates = {
     nunki : {
 	name : "Nunki",
 	subtitle : "Mobile robotic observatory",
+	intro : "<p>The <strong>Nunki observatory</strong> will be an easily transportable robotic observatory fully operable trough Web '3.0' interfaces.</p> <p>It will be dedicated to bring computerized astronomy to a large spectrum of public, from children groups to research students.</p>",
 	ui_opts : {child_view_type : "pills",
 		   child_classes : ["row"],
 		   root_classes : ["container-fluid"]
@@ -238,6 +242,7 @@ var nunki_templates = {
 	    },
 	    mount : {
 		type : "template",template_name : "mount_control",
+
 	    }
 	}
     },
