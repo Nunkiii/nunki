@@ -29,16 +29,17 @@ template_ui_builders.sbig_control=function(ui_opts, sbig){
     
     
     var control_panel=sbig.elements.control_panel.elements;
-    var server=control_panel.server;
-    var messages=server.elements.messages;
+
     
     var drawing_node=cc("div", screen.ui_root);
     drawing_node.add_class("drawing_node");
     glm.set_drawing_node(drawing_node);
 
+    var main=control_panel.main.elements;
     var cooling=control_panel.cooling.elements;    
     var expo_base=control_panel.exposure.elements;
-
+    
+    
     var expo_setup=expo_base.setup.elements;
     var expo=expo_base.exposure.elements;
 
@@ -53,12 +54,15 @@ template_ui_builders.sbig_control=function(ui_opts, sbig){
     var expo_progress=expo_status.elements.expo_progress;
     var grab_progress=expo_status.elements.grab_progress;    
 
-    var cam_sw=control_panel.cam_switch.elements;
+    
+    var cam_sw=main.cam_switch.elements;
+
     var start_camera=cam_sw.start_camera;
     var cam_status=cam_sw.status;
 
     
-
+    var server=main.server;
+    var messages=server.elements.messages;
 
     var enable_cooling=cooling.enable;
     var cooling_setpoint=cooling.setpoint;
@@ -71,7 +75,7 @@ template_ui_builders.sbig_control=function(ui_opts, sbig){
 
     var sadira=server; 
     
-    server.elements.url.set_value("ws://localhost");
+    //server.elements.url.set_value("ws://localhost");
 
 
     var cam_online=false;

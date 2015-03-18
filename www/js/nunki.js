@@ -105,33 +105,41 @@ var nunki_templates = {
 		    icon : "/nunki/icons/sbig_cam.png", name_node : "h2"
 		},
 		elements : {
-		    cam_switch : {
-			name : "Initialization", subtitle : "Initialize/Release the SBIG camera driver.", intro : "<p>The camera driver is a native C++ Node.js addon that runs on the Sadira Node.js server physically connected to the SBIG camera(s).</p> <p>It happens that bugs in the camera driver makes the firmware to crash, in such a case there is no other way than to plug/unplug the camera to force firmware reload trough USB and to restart the Node.js Sadira server processes.</p><p>More investigations are needed to find a suitable solution to the problem.</p>",
-			ui_opts : {root_classes : ["container-fluid"], child_classes : ["row"]},
+		    main : {
+			name : "Camera setup",
+			ui_opts : { root_classes : ["container-fluid"], child_classes : ["container-fluid"]},
 			elements : {
-			    start_camera : {
-				name : "Start camera", type : "action",
-				ui_opts : {
-				    item_classes : ["btn btn-primary"], fa_icon : "play",
-					    root_classes : ["col-xs-5 col-sm-5"]
-				},
+			    server : {
+				name : "Server",
+				subtitle : "Sadira websocket server",
+				intro : "<p>Address of a Sadira Node.js server participating in the same cluster as at least one SBIG camera server</p><p>Usually, default setting (connecting to the same server as the one serving you these pages) is what you want.</p>",
+				type : "template",
+				template_name : "sadira",
+				ui_opts : {root_classes : ["container-fluid"], child_classes : ["container-fluid"]},
 			    },
-			    status : {
-				name: "status : ",
-				type : "string",
-				ui_opts : {root_classes : ["col-xs-12 col-sm-7"], text_node : "div", label : true},
+			    
+			    
+			    cam_switch : {
+				name : "Driver switch", subtitle : "Initialize/Release the SBIG camera driver.", intro : "<p>The camera driver is a native C++ Node.js addon running on a Sadira Node.js server physically connected to a SBIG camera.</p> <p>Driver should be unloaded before physically unplugging the camera, failing to do so makes the driver to crash and sadira processes need to be restarted.</p>",
+				ui_opts : {root_classes : ["container-fluid"], child_classes : ["row"]},
+				elements : {
+				    start_camera : {
+					name : "Start camera", type : "action",
+					ui_opts : {
+					    item_classes : ["btn btn-primary"], fa_icon : "play",
+					    root_classes : ["col-xs-5 col-sm-5"]
+					},
+				    },
+				    status : {
+					name: "status : ",
+					type : "string",
+					ui_opts : {root_classes : ["col-xs-12 col-sm-7"], text_node : "div", label : true},
+				    }
+				}
 			    }
 			}
 		    },
 		    
-		    server : {
-			name : "Server",
-			subtitle : "Sadira websocket server",
-			intro : "<p>Address of a Sadira Node.js server participating in the same cluster as at least one SBIG camera server</p><p>Usually, default setting (connecting to the same server as the one serving you these pages) is what you want.</p>",
-			type : "template",
-			template_name : "sadira",
-			ui_opts : {root_classes : ["container-fluid"], child_classes : ["container-fluid"]},
-		    },
 		    exposure : {
 			name : "Exposure",
 			ui_opts : { render_name : false},
