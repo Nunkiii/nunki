@@ -20,10 +20,14 @@ exports.init_master=function(pkg, app){
 
 var sbig_cli=function(pkg,app){
     var scli=this;
+
+    var redis_host="192.167.166.207";
+    var redis_host_port=6379;
+    
     
     var redis = require("../../sadira/node_modules/redis");
-    var redis_cnx =scli.redis_cnx=redis.createClient({detect_buffers: true});
-    var redis_pubcnx = scli.redis_pubcnx=redis.createClient({detect_buffers: true});
+    var redis_cnx =scli.redis_cnx=redis.createClient(redis_host_port, redis_host ,{detect_buffers: true});
+    var redis_pubcnx = scli.redis_pubcnx=redis.createClient(redis_host_port, redis_host, {detect_buffers: true});
     
     DLG.new_event(this, "message");
     
@@ -70,9 +74,12 @@ var sbig_cam = function(){
 	console.log("cam prop : " + e);
     }
 
+    var redis_host="192.167.166.207";
+    var redis_host_port=6379;
+
     var redis = require("../../sadira/node_modules/redis");
-    var cnx=sbg.redis_cnx = redis.createClient({detect_buffers: true});
-    var pubcnx=sbg.redis_pubcnx = redis.createClient({detect_buffers: true});
+    var cnx=sbg.redis_cnx = redis.createClient(redis_host_port, redis_host,{detect_buffers: true});
+    var pubcnx=sbg.redis_pubcnx = redis.createClient(redis_host_port, redis_host,{detect_buffers: true});
 
     function publish_status(m){
 	pubcnx.set("nunki:sbig:init_status", JSON.stringify(m));

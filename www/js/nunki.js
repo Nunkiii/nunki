@@ -7,8 +7,9 @@ var nunki_templates = {
 	name : "Mount control",
 	ui_opts : {
 	    child_view_type : "div",
-	    child_classes : ["panel panel-default"],
+	    child_classes : ["container-fluid"],
 	    root_classes : ["container-fluid"],
+	    //render_name : false,
 	    name_node : "h2",
 	    icon : "/nunki/icons/mount.png",
 	},
@@ -133,23 +134,31 @@ var nunki_templates = {
 		    },
 		    exposure : {
 			name : "Exposure",
+			ui_opts : { render_name : false},
 			elements : {
 			    setup : {
-				name : "Configuration",subtitle : "Set exposure parameters :",
+				name : "Options",subtitle : "Set exposure parameters :",
 				ui_opts : {
+				    child_node_type : "form",
+				    child_classes : ["form-horizontal container-fluid"],
 				    root_classes : ["container-fluid"],
-				    child_classes : ["row"],
 				    fa_icon : "wrench",
-				    editable : true
+				    editable : true,
+				    edit_apply : true,
+				    save : true
 				},
 				elements : {
 				    exptime : {
-					name : "Exposure time", type : "double", intro : "<p>Exposure time in seconds.</p>",
+					name : "Exposure time", type : "double",
+					intro : "<p>Exposure time in seconds.</p>",
 					default_value : 10, min : 0, max : 10000, step : .5,
 					ui_opts : {
+					    root_classes : ["form-group row"],
 					    label : true,
-					    root_classes : ["col-sm-4"],
-					    
+					    name_classes : ["control-label col-xs-4"],
+					    wrap : true,
+					    wrap_classes : ["col-xs-7"],
+					    intro_name : true
 					}
 				    },
 				    nexpo : {
@@ -157,9 +166,13 @@ var nunki_templates = {
 					default_value : 1,
 					min : 1, max : 1024, step : 1,
 					ui_opts : {
+					    root_classes : ["form-group"],
 					    label : true,
-					    root_classes : ["col-sm-4"]
+					    name_classes : ["control-label col-xs-4"],
+					    wrap : true,
+					    wrap_classes : ["col-xs-7"]
 					}
+
 				    },
 				    binning : {
 					name : "Binning",
@@ -167,15 +180,24 @@ var nunki_templates = {
 					options : ["1X"],
 					default_value : "1X",
 					ui_opts : {
+					    root_classes : ["form-group"],
 					    label : true,
-					    root_classes : ["col-sm-4"]
+					    name_classes : ["control-label col-xs-4"],
+					    wrap : true,
+					    wrap_classes : ["col-xs-7"]
 					}
+
 				    }
 				}
 			    },
 			    exposure : {
 				name : "Image acquisition",
-				ui_opts : {},
+				ui_opts : {
+				    root_classes : ["container-fluid"],
+				    child_classes : ["row"],
+				    fa_icon : "camera",
+				    
+				},
 				elements : {
 				    start_exposure : {
 					name : "Start exposure",
@@ -183,17 +205,19 @@ var nunki_templates = {
 					ui_opts: {item_classes : ["btn btn-primary"], fa_icon : "circle"}
 				    },
 				    expo_status : {
-					
+					type : "string",
 					name : "Exposure status :",
 					ui_opts : {
-					    root_classes :  ["row"],
+					    root_classes :  ["col-md-6"],
 					    child_classes :["container-fluid"],
+					    label : true
 					},
 					elements : {
 					    expo_progress : {
 						name : "Exposure progress",
 						type : "progress",
 						ui_opts : {
+						    label : true,
 						    root_classes :  ["row"],
 						    name_classes : ["col-md-4"], 
 						    item_classes :["col-md-8"],
@@ -203,6 +227,7 @@ var nunki_templates = {
 						name : "Grab progress",
 						type : "progress",
 						ui_opts : {
+						    label : true,
 						    root_classes :  ["row"],
 						    name_classes : ["col-md-4"], 
 						    item_classes :["col-md-8"],
@@ -287,13 +312,17 @@ var nunki_templates = {
     nunki : {
 	name : "Nunki",
 	subtitle : "Mobile robotic observatory",
-	intro : "<p>The <strong>Nunki observatory</strong> will be a transportable robotic observatory fully controlled trough web interfaces, making use of the latest technologies available.</p> <p>It will be dedicated to help bringing computerized astronomy to a large spectrum of interested and curious public, from children groups, research students to retired people.</p>",
+	
+	//intro : "<p>The <strong>Nunki observatory</strong> will be a transportable robotic observatory fully controlled trough web interfaces, making use of the latest technologies available.</p> <p>It will be dedicated to help bringing computerized astronomy to a large spectrum of interested and curious public, from children groups, research students, retired people, ...</p>",
 
 //<p>The project homepage will be available soon at <a href='http://www.nunki-observatory.net'>www.nunki-observatory.net</a>.</p>",
-	ui_opts : {child_view_type : "pills",
-		   child_classes : ["row"],
-		   root_classes : ["container-fluid"]
-		  },
+	ui_opts : {
+	    root: true,
+	    child_view_type : "tabbed",
+	    child_classes : ["row"],
+	    root_classes : ["container-fluid"],
+	    tabs_on_name : true
+	},
 	//name : "Observatory control",
 	tpl_builder : "nunki",
 	elements : {
@@ -306,17 +335,37 @@ var nunki_templates = {
 
 	    },
 	    filter_wheel : {
-		name :"Filter wheel"
-	    },
-	    spectro : {
-		name :"Spectrograph"
-	    },
-	    meteo : {
-		name : "Meteo"
-	    },
-	    dome : {
-		name : "Dome"
+		name :"Filter wheel",
+		ui_opts : {
+		    root_classes : ["container-fluid"],
+		    name_node : "h2",
+		    icon : "/nunki/icons/mount.png",
+		}
 	    }
+	    // spectro : {
+	    // 	name :"Spectrograph",
+	    // 	ui_opts : {
+	    // 	    root_classes : ["container-fluid"],
+	    // 	    name_node : "h2",
+	    // 	    icon : "/nunki/icons/mount.png",
+	    // 	}
+	    // },
+	    // meteo : {
+	    // 	name : "Meteo",
+	    // 	ui_opts : {
+	    // 	    root_classes : ["container-fluid"],
+	    // 	    name_node : "h2",
+	    // 	    icon : "/nunki/icons/mount.png",
+	    // 	}
+	    // },
+	    // dome : {
+	    // 	name : "Dome",
+	    // 	ui_opts : {
+	    // 	    root_classes : ["container-fluid"],
+	    // 	    name_node : "h2",
+	    // 	    icon : "/nunki/icons/mount.png",
+	    // 	}
+	    // }
 	}
     },
     
