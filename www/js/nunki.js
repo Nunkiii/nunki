@@ -77,7 +77,39 @@ var nunki_templates = {
 	    }
 	}
     },
-
+    
+    message_handler : {
+	
+	//name : "Message title",
+	//subtitle : "Et ça ?",
+	tpl_builder : "message_handler",
+	ui_opts : {
+	    root_classes : ["container-fluid"],
+	    //item_root : true,
+	    //name_classes : ["control-label col-xs-2"],
+	    child_classes : ["form-group input-group"],
+	    //render_name: false
+	},
+	elements : {
+	    btn : {
+		name : "Apply changes",
+		type : "action",
+		ui_opts : {
+		    button_node : "span",
+		    item_classes : ["btn btn-info "], fa_icon : "play",
+		    //item_root : true,
+		    root_classes : ["input-group-btn"]
+		},
+	    },
+	    status : {
+		name: "status : ",
+		type : "string",
+		ui_opts : {item_classes : ["input-group-addon full"], text_node : "span", label : true,
+			   item_root : true,
+			  },
+	    }
+	}
+    },
     sbig_control : {
 	type : "sbig_control",
 	name : "SBIG camera",
@@ -107,36 +139,26 @@ var nunki_templates = {
 		elements : {
 		    main : {
 			name : "Camera setup",
-			ui_opts : { root_classes : ["container-fluid"], child_classes : ["container-fluid"]},
+			ui_opts : {root_classes : ["container-fluid"], child_classes : ["container-fluid"]},
 			elements : {
 			    server : {
-				name : "Server",
+				name : "Server url",
 				subtitle : "Sadira websocket server",
 				intro : "<p>Address of a Sadira Node.js server participating in the same cluster as at least one SBIG camera server</p><p>Usually, default setting (connecting to the same server as the one serving you these pages) is what you want.</p>",
 				type : "template",
 				template_name : "sadira",
-				ui_opts : {root_classes : ["container-fluid"], child_classes : ["container-fluid"]},
+				ui_opts : {
+				    sliding: true, slided: false, label : true
+				    //root_classes : ["row"], name_classes : ["col-sm-5"], item_classes : ["col-sm-5"]
+				},
 			    },
 			    
-			    
 			    cam_switch : {
-				name : "Driver switch", subtitle : "Initialize/Release the SBIG camera driver.", intro : "<p>The camera driver is a native C++ Node.js addon running on a Sadira Node.js server physically connected to a SBIG camera.</p> <p>Driver should be unloaded before physically unplugging the camera, failing to do so makes the driver to crash and sadira processes need to be restarted.</p>",
-				ui_opts : {root_classes : ["container-fluid"], child_classes : ["row"]},
-				elements : {
-				    start_camera : {
-					name : "Start camera", type : "action",
-					ui_opts : {
-					    item_classes : ["btn btn-primary"], fa_icon : "play",
-					    root_classes : ["col-xs-5 col-sm-5"]
-					},
-				    },
-				    status : {
-					name: "status : ",
-					type : "string",
-					ui_opts : {root_classes : ["col-xs-12 col-sm-7"], text_node : "div", label : true},
-				    }
-				}
+				type : "template",
+				template_name  : "message_handler",
+				name : "Driver switch", subtitle : "Initialize/Release the SBIG camera driver.", intro : "<p>The camera driver is a native C++ Node.js addon running on a Sadira Node.js server physically connected to a SBIG camera.</p> <p>Driver should be unloaded before physically unplugging the camera, failing to do so makes the driver to crash and sadira processes need to be restarted.</p>"
 			    }
+			    
 			}
 		    },
 		    
@@ -145,107 +167,141 @@ var nunki_templates = {
 			ui_opts : { render_name : false},
 			elements : {
 			    setup : {
-				name : "Options",subtitle : "Set exposure parameters :",
+				name : "Options", subtitle : "Set exposure parameters :",
+				type : "expo_setup",
 				ui_opts : {
-				    child_node_type : "form",
-				    child_classes : ["form-horizontal container-fluid"],
+				    sliding : true,
+				    //child_node_type : "form",
+				    child_classes : ["container-fluid"],
 				    root_classes : ["container-fluid"],
 				    fa_icon : "wrench",
-				    editable : true,
-				    edit_apply : true,
+				    //editable : true,
+				    //edit_apply : true,
 				    save : true
 				},
 				elements : {
-				    exptime : {
-					name : "Exposure time", type : "double",
-					intro : "<p>Exposure time in seconds.</p>",
-					default_value : 10, min : 0, max : 10000, step : .5,
+				    params :{
 					ui_opts : {
-					    root_classes : ["form-group row"],
-					    label : true,
-					    name_classes : ["control-label col-xs-4"],
-					    wrap : true,
-					    wrap_classes : ["col-xs-7"],
-					    intro_name : true
+					    child_node_type : "form",
+					    child_classes : ["form-horizontal container-fluid"],
+					    root_classes : ["container-fluid"],
+					    //fa_icon : "wrench",
+					    //editable : true,
+					    //type : "edit",
+					    //edited : true,
+					    //edit_apply : true,
+					    //save : true
+					},
+
+					elements : {
+					    exptime : {
+						name : "Exposure time", type : "double",
+						intro : "<p>Exposure time in seconds.</p>",
+						default_value : 10, min : 0, max : 10000, step : .5,
+						ui_opts : {
+						    root_classes : ["form-group row"],
+						    label : true,
+						    name_classes : ["control-label col-xs-4"],
+						    intro_name : true,
+						    type : "edit"
+						}
+					    },
+					    nexpo : {
+						name : "Number of expos", type : "double",
+						default_value : 1,
+						min : 1, max : 1024, step : 1,
+						ui_opts : {
+						    type : "edit",
+						    root_classes : ["form-group"],
+						    label : true,
+						    name_classes : ["control-label col-xs-4"],
+						}
+						
+					    },
+					    binning : {
+						name : "Binning",
+						type : "combo",
+						options : ["1X"],
+						default_value : "1X",
+						ui_opts : {
+						    type : "edit",
+						    root_classes : ["form-group"],
+						    label : true,
+						    name_classes : ["control-label col-xs-4"]
+						}
+					    }
 					}
 				    },
-				    nexpo : {
-					name : "Number of expos", type : "double",
-					default_value : 1,
-					min : 1, max : 1024, step : 1,
-					ui_opts : {
-					    root_classes : ["form-group"],
-					    label : true,
-					    name_classes : ["control-label col-xs-4"],
-					    wrap : true,
-					    wrap_classes : ["col-xs-7"]
-					}
 
-				    },
-				    binning : {
-					name : "Binning",
-					type : "combo",
-					options : ["1X"],
-					default_value : "1X",
-					ui_opts : {
-					    root_classes : ["form-group"],
-					    label : true,
-					    name_classes : ["control-label col-xs-4"],
-					    wrap : true,
-					    wrap_classes : ["col-xs-7"]
-					}
-
+				    mhd : {
+					type : "template",
+					template_name  : "message_handler",
+					//name : "Send",
+					//subtitle : "Send exposure params to camera"
 				    }
+				    
 				}
 			    },
 			    exposure : {
 				name : "Image acquisition",
 				ui_opts : {
 				    root_classes : ["container-fluid"],
-				    child_classes : ["row"],
+				    child_classes : ["container-fluid"],
 				    fa_icon : "camera",
 				    
 				},
 				elements : {
-				    start_exposure : {
-					name : "Start exposure",
-					type : "action",
-					ui_opts: {item_classes : ["btn btn-primary"], fa_icon : "circle"}
+				    mhd : {
+					type : "template",
+					template_name  : "message_handler",
+					//name : "Send",
+					//subtitle : "Send exposure params to camera"
 				    },
-				    expo_status : {
-					type : "string",
-					name : "Exposure status :",
+				    expo_progress : {
+					name : "Turning photons into numbers...",
+					type : "progress",
 					ui_opts : {
-					    root_classes :  ["col-md-6"],
-					    child_classes :["container-fluid"],
-					    label : true
-					},
-					elements : {
-					    expo_progress : {
-						name : "Exposure progress",
-						type : "progress",
-						ui_opts : {
-						    label : true,
-						    root_classes :  ["row"],
-						    name_classes : ["col-md-4"], 
-						    item_classes :["col-md-8"],
-						}
-					    },
-					    grab_progress : {
-						name : "Grab progress",
-						type : "progress",
-						ui_opts : {
-						    label : true,
-						    root_classes :  ["row"],
-						    name_classes : ["col-md-4"], 
-						    item_classes :["col-md-8"],
-						}
-
-					    }
+					    label : true,
+					    root_classes :  ["row"],
+					    name_classes : ["col-xs-4"],
+					    wrap : true,
+					    wrap_classes : ["col-xs-7"],
+					    item_classes :["form-control progress"],
 					}
+				    },
+				    grab_progress : {
+					name : "Fetching data from device...",
+					type : "progress",
+					ui_opts : {
+					    label : true,
+					    root_classes :  ["row"],
+					    name_classes : ["col-xs-4"],
+					    wrap : true,
+					    wrap_classes : ["col-xs-7"],
+					    item_classes :["form-control progress"],
+					}
+
+				    },
+				    data_progress : {
+					name : "Download image",
+					type : "progress",
+					ui_opts : {
+					    label : true,
+					    root_classes :  ["row"],
+					    name_classes : ["col-xs-4"],
+					    wrap : true,
+					    wrap_classes : ["col-xs-7"],
+					    item_classes :["form-control progress"],
+					}
+
 				    }
 				}
+			    },
 
+			    last_image : {
+				name : "No data",
+				type : "template",
+				template_name : "image"
 			    }
 			    
 			    
@@ -265,8 +321,8 @@ var nunki_templates = {
 	    },
 	    	    
 	    glwidget : {
-		name : "Camera monitor",
-		subtitle : "View the last image published by the camera driver.",
+		//name : "Camera monitor",
+		//subtitle : "View the last image published by the camera driver.",
 		ui_opts : { root_classes : ["col-md-7"]},
 		//type : "string", value : "Hello widget !",
 		elements : {
