@@ -1,7 +1,41 @@
 
 
 var nunki_templates = {
-        
+    
+    rectangle : {
+	name : "Rectangle",
+	intro : "Set up position and dimension",
+	ui_opts :  {root_classes : [],child_classes : [], editable : true, edited : false},
+	elements : {
+	    p:{
+		name : "Top/Left corner",
+		type : "labelled_vector",
+		value_labels : ["C<sub>X</sub>","C<sub>Y</sub>"],
+		value : [0,0],
+		ui_opts : {
+		    child_classes : [], label : true,
+		    root_classes : ["form-group row"],
+		    name_classes : ["control-label col-xs-4"],
+		    intro_name : true,
+		}
+	    },
+	    d:{
+		name : "Dimensions",
+		type : "labelled_vector",
+		value_labels : ["Width","Height"],
+		value : [0,0],
+		ui_opts : {
+		    //child_classes : ["input-group"],
+		    label : true,
+		    root_classes : ["form-group row"],
+		    name_classes : ["control-label col-xs-4"],
+		}
+	    },
+	    
+	}
+    },
+    
+    
     mount_control : {
 	type : "mount_control",
 	name : "Mount control",
@@ -111,8 +145,10 @@ var nunki_templates = {
 	}
     },
     sbig_control : {
+
 	type : "sbig_control",
 	name : "SBIG camera",
+
 	ui_opts : {
 	    child_view_type : "div",
 	    child_classes : ["row"],
@@ -134,30 +170,43 @@ var nunki_templates = {
 		name : "SBIG camera control panel", 
 		ui_opts : {
 		    child_view_type : "tabbed", root_classes : ["col-md-5"], child_classes : [],
+		    tab_scroll_height : "58vh",
 		    icon : "/nunki/icons/sbig_cam.png", name_node : "h2"
 		},
 		elements : {
 		    main : {
 			name : "Camera setup",
-			ui_opts : {root_classes : ["container-fluid"], child_classes : ["container-fluid"]},
+			ui_opts : {
+			    root_classes : ["container-fluid"], child_classes : ["container-fluid"],
+			    render_name : false,
+			    child_view_type : "pills"
+			    
+			},
 			elements : {
+			    cam_switch : {
+				type : "template",
+				template_name  : "message_handler",
+				name : "Driver switch", subtitle : "Initialize/Release the SBIG camera driver.", intro : "<p>The camera driver is a native C++ Node.js addon running on a Sadira Node.js server physically connected to a SBIG camera.</p> <p>Driver should be unloaded before physically unplugging the camera, failing to do so makes the driver to crash and sadira processes need to be restarted.</p>",
+				ui_opts : {
+				    root_classes : ["container-fluid"]
+				    //sliding: true, slided: false//, label : true
+				    //root_classes : ["row"], name_classes : ["col-sm-5"], item_classes : ["col-sm-5"]
+				},
+			    },
+
 			    server : {
-				name : "Server url",
+				name : "Websocket server url",
 				subtitle : "Sadira websocket server",
 				intro : "<p>Address of a Sadira Node.js server participating in the same cluster as at least one SBIG camera server</p><p>Usually, default setting (connecting to the same server as the one serving you these pages) is what you want.</p>",
 				type : "template",
 				template_name : "sadira",
 				ui_opts : {
-				    sliding: true, slided: false, label : true
+				    root_classes : ["container-fluid"],
+				    //sliding: true, slided: false//, label : true
 				    //root_classes : ["row"], name_classes : ["col-sm-5"], item_classes : ["col-sm-5"]
 				},
-			    },
-			    
-			    cam_switch : {
-				type : "template",
-				template_name  : "message_handler",
-				name : "Driver switch", subtitle : "Initialize/Release the SBIG camera driver.", intro : "<p>The camera driver is a native C++ Node.js addon running on a Sadira Node.js server physically connected to a SBIG camera.</p> <p>Driver should be unloaded before physically unplugging the camera, failing to do so makes the driver to crash and sadira processes need to be restarted.</p>"
 			    }
+			    
 			    
 			}
 		    },
@@ -228,6 +277,19 @@ var nunki_templates = {
 						    root_classes : ["form-group"],
 						    label : true,
 						    name_classes : ["control-label col-xs-4"]
+						}
+					    },
+					    subframe : {
+						name : "Sub frame",
+						intro : "Set the coordinates of the subframe for readout. Zero dimension means all frame.",
+						type : "template",
+						template_name : "rectangle",
+						ui_opts : {
+						    type : "edit",
+						    root_classes : ["container-fluid"],
+						    child_classes : ["form container-fluid"],
+						    //name_classes : ["control-label col-xs-4"],
+						    label : true
 						}
 					    }
 					}
@@ -316,26 +378,15 @@ var nunki_templates = {
 			    enable : {name : "Enable cooling", value : false, type : "bool", ui_opts : { type : "edit"} },
 			    setpoint : {name: "Temperature setpoint", value : 0.0, type : "double", ui_opts : { type : "edit"}}
 			}
-		    }
-		}
-	    },
-	    	    
-	    glwidget : {
-		//name : "Camera monitor",
-		//subtitle : "View the last image published by the camera driver.",
-		ui_opts : { root_classes : ["col-md-7"]},
-		//type : "string", value : "Hello widget !",
-		elements : {
+		    },
 		    glm : {
-			//name : "GL View setup",
+			name : "GL monitor setup",
 			type : "template",
 			template_name : "gl_multilayer",
 			server_root : "XD-1/",
 			ui_opts: {
-			    sliding: false,
-			    slided : false,
 			    child_view_type : "tabbed",
-			    render_name : false
+			    //render_name : false
 
 			},
 
@@ -349,6 +400,16 @@ var nunki_templates = {
 			//     }
 			// }
 		    },
+
+		}
+	    },
+	    	    
+	    glwidget : {
+		//name : "Camera monitor",
+		//subtitle : "View the last image published by the camera driver.",
+		ui_opts : { root_classes : ["col-md-7"]},
+		//type : "string", value : "Hello widget !",
+		elements : {
 		    screen : {
 			//name : "GL Screen"
 			//type : "glscreen"
@@ -382,7 +443,7 @@ var nunki_templates = {
 //<p>The project homepage will be available soon at <a href='http://www.nunki-observatory.net'>www.nunki-observatory.net</a>.</p>",
 	ui_opts : {
 	    root: true,
-	    child_view_type : "tabbed",
+	    child_view_type : "pills",
 	    child_classes : ["row"],
 	    root_classes : ["container-fluid"],
 	    tabs_on_name : true

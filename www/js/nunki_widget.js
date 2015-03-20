@@ -6,7 +6,7 @@ var BSON=bson().BSON;
 
 template_ui_builders.nunki=function(ui_opts, nunki){
 
-    console.log("NUNKI Build....");
+    //console.log("NUNKI Build....");
 
     var sbig=nunki.elements.sbig;
 
@@ -72,12 +72,14 @@ template_ui_builders.expo_setup=function(ui_opts, expo_setup){
 template_ui_builders.sbig_control=function(ui_opts, sbig){
     
     var glwidget=sbig.elements.glwidget;
-    var glm = glwidget.elements.glm;
+    var control_panel=sbig.elements.control_panel.elements;
+    
+    var glm = control_panel.glm;
     var screen = glwidget.elements.screen;
 
 //    var actions=sbig.elements.actions.elements;
     
-    var control_panel=sbig.elements.control_panel.elements;
+    
     
     var drawing_node=cc("div", screen.ui_root);
     drawing_node.add_class("drawing_node");
