@@ -148,7 +148,6 @@ var nunki_templates = {
 
 	type : "sbig_control",
 	name : "SBIG camera",
-
 	ui_opts : {
 	    child_view_type : "div",
 	    child_classes : ["row"],
@@ -167,11 +166,18 @@ var nunki_templates = {
 	    
 
 	    control_panel : {
-		name : "SBIG camera control panel", 
+		name : "SBIG camera", subtitle:"control panel",
+		toolbar : {
+		    ui_opts : {
+			//nav_classes : ["nav-pills navbar-right"],
+			//toolbar_classes : ["noborder"]
+		    }
+		},
+
 		ui_opts : {
 		    child_view_type : "tabbed", root_classes : ["col-md-5"], child_classes : [],
 		    tab_scroll_height : "58vh",
-		    icon : "/nunki/icons/sbig_cam.png", name_node : "h2"
+		    icon : "/nunki/icons/sbig_cam.png", name_node : "h4"
 		},
 		elements : {
 		    main : {
@@ -380,7 +386,7 @@ var nunki_templates = {
 			}
 		    },
 		    glm : {
-			name : "GL monitor setup",
+			name : "Display",
 			type : "template",
 			template_name : "gl_multilayer",
 			server_root : "XD-1/",
@@ -441,11 +447,14 @@ var nunki_templates = {
 	//intro : "<p>The <strong>Nunki observatory</strong> will be a transportable robotic observatory fully controlled trough web interfaces, making use of the latest technologies available.</p> <p>It will be dedicated to help bringing computerized astronomy to a large spectrum of interested and curious public, from children groups, research students, retired people, ...</p>",
 
 //<p>The project homepage will be available soon at <a href='http://www.nunki-observatory.net'>www.nunki-observatory.net</a>.</p>",
+
+	toolbar : {},
 	ui_opts : {
 	    root: true,
 	    child_view_type : "pills",
 	    child_classes : ["row"],
 	    root_classes : ["container-fluid"],
+	    name_node : "h2",
 	    tabs_on_name : true
 	},
 	//name : "Observatory control",

@@ -222,13 +222,13 @@ var sbig_cam = function(pkg, app){
 			
 			//image.swapx();
 			//image.swapy();
-			
+		
 			pub_image(image.get_data());
 			//console.log("Got data  + " + (typeof data) + " length " + data.length + " bl " + data.byteLength);
 			break;
 
 		    default:
-			//console.log("expo message : " + JSON.stringify(expo_message));
+			console.log("expo message : " + JSON.stringify(expo_message));
 			pub_message(expo_message);
 			break;
 		    }
