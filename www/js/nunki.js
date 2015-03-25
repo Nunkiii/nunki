@@ -45,7 +45,7 @@ var nunki_templates = {
 	    root_classes : ["container-fluid"],
 	    //render_name : false,
 	    name_node : "h2",
-	    icon : "/nunki/icons/mount.png",
+	    icon : "/nunki/icons/mount.svg",
 	},
 
 	elements : {
@@ -152,7 +152,7 @@ var nunki_templates = {
 	    child_view_type : "div",
 	    child_classes : ["row"],
 	    root_classes : ["container-fluid"],
-	    icon : "/nunki/icons/sbig_cam.png",
+	    icon : "/nunki/icons/sbig.svg",
 	    render_name : false
 	},
 	elements : {
@@ -177,7 +177,7 @@ var nunki_templates = {
 		ui_opts : {
 		    child_view_type : "tabbed", root_classes : ["col-md-5"], child_classes : [],
 		    tab_scroll_height : "58vh",
-		    icon : "/nunki/icons/sbig_cam.png", name_node : "h4"
+		    icon : "/nunki/icons/sbig.svg", name_node : "h4"
 		},
 		elements : {
 		    main : {
@@ -473,7 +473,7 @@ var nunki_templates = {
 		ui_opts : {
 		    root_classes : ["container-fluid"],
 		    name_node : "h2",
-		    icon : "/nunki/icons/mount.png",
+		    icon : "/nunki/icons/wheel.svg",
 		}
 	    }
 	    // spectro : {
