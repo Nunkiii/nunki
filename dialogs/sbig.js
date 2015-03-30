@@ -34,8 +34,8 @@ var sbig_cli=function(pkg,app){
     var redis_cnx =scli.redis_cnx=redis.createClient(redis_host_port, redis_host ,{detect_buffers: true});
     var redis_pubcnx = scli.redis_pubcnx=redis.createClient(redis_host_port, redis_host, {detect_buffers: true});
     
-    DLG.new_event(this, "message");
-    DLG.new_event(this, "image");
+    new_event(this, "message");
+    new_event(this, "image");
     
     redis_cnx.on("subscribe", function (channel, count) {
 	app.log("SBIG redis client: subscribed to channel ["+channel+"]");

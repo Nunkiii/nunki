@@ -53,8 +53,7 @@ var nunki_templates = {
 		elements : {
 		    server : {
 			name : "Mount server",
-			type : "template",
-			template_name : "sadira"
+			type : "sadira"
 		    },
 		}
 	    },
@@ -190,8 +189,7 @@ var nunki_templates = {
 			},
 			elements : {
 			    cam_switch : {
-				type : "template",
-				template_name  : "message_handler",
+				type : "message_handler",
 				name : "Driver switch", subtitle : "Initialize/Release the SBIG camera driver.", intro : "<p>The camera driver is a native C++ Node.js addon running on a Sadira Node.js server physically connected to a SBIG camera.</p> <p>Driver should be unloaded before physically unplugging the camera, failing to do so makes the driver to crash and sadira processes need to be restarted.</p>",
 				ui_opts : {
 				    root_classes : ["container-fluid"]
@@ -204,8 +202,7 @@ var nunki_templates = {
 				name : "Websocket server url",
 				subtitle : "Sadira websocket server",
 				intro : "<p>Address of a Sadira Node.js server participating in the same cluster as at least one SBIG camera server</p><p>Usually, default setting (connecting to the same server as the one serving you these pages) is what you want.</p>",
-				type : "template",
-				template_name : "sadira",
+				type : "sadira",
 				ui_opts : {
 				    root_classes : ["container-fluid"],
 				    //sliding: true, slided: false//, label : true
@@ -288,8 +285,7 @@ var nunki_templates = {
 					    subframe : {
 						name : "Sub frame",
 						intro : "Set the coordinates of the subframe for readout. Zero dimension means all frame.",
-						type : "template",
-						template_name : "rectangle",
+						type : "rectangle",
 						ui_opts : {
 						    type : "edit",
 						    root_classes : ["container-fluid"],
@@ -302,10 +298,8 @@ var nunki_templates = {
 				    },
 
 				    mhd : {
-					type : "template",
-					template_name  : "message_handler",
-					//name : "Send",
-					//subtitle : "Send exposure params to camera"
+					type : "message_handler",
+
 				    }
 				    
 				}
@@ -320,8 +314,7 @@ var nunki_templates = {
 				},
 				elements : {
 				    mhd : {
-					type : "template",
-					template_name  : "message_handler",
+					type : "message_handler",
 					//name : "Send",
 					//subtitle : "Send exposure params to camera"
 				    },
@@ -368,8 +361,7 @@ var nunki_templates = {
 
 			    last_image : {
 				name : "No data",
-				type : "template",
-				template_name : "image"
+				type :  "image"
 			    }
 			    
 			    
@@ -387,8 +379,7 @@ var nunki_templates = {
 		    },
 		    glm : {
 			name : "Display",
-			type : "template",
-			template_name : "gl_multilayer",
+			type : "gl_multilayer",
 			server_root : "XD-1/",
 			ui_opts: {
 			    child_view_type : "tabbed",
@@ -462,10 +453,10 @@ var nunki_templates = {
 	elements : {
 	    sbig :{
 		//type : "string", value : "Hello DB !"
-		type : "template",template_name : "sbig_control",
+		type :  "sbig_control",
 	    },
 	    mount : {
-		type : "template",template_name : "mount_control",
+		type :  "mount_control",
 
 	    },
 	    filter_wheel : {
