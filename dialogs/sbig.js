@@ -6,20 +6,23 @@ var bson=require('../../sadira/www/js/community/bson');;
 var BSON=bson().BSON;
 
 var sbig_cli_master;
-exports.init=function(pkg, app){
+exports.init=function(pkg, app,cb){
     if(pkg.opts.client){
 	app.log("SBIG client module slave: init...");
 	sbig_cli_master=new sbig_cli(pkg,app);
 	app.dialog("nunki.sbig", nunki_sbig);
     }
+    cb();
 }
 
 var sbig_cam_master;
-exports.init_master=function(pkg, app){
+exports.init_master=function(pkg, app, cb){
     if(pkg.opts.master){
 	app.log("SBIG module master: init");
 	sbig_cam_master = new sbig_cam(pkg, app);
     }
+    cb();
+
 }
 
 
