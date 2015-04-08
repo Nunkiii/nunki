@@ -115,7 +115,7 @@ var nunki_templates = {
 	
 	//name : "Message title",
 	//subtitle : "Et ça ?",
-	tpl_builder : "message_handler",
+	//tpl_builder : "message_handler",
 	ui_opts : {
 	    root_classes : ["container-fluid"],
 	    //item_root : true,
@@ -145,7 +145,7 @@ var nunki_templates = {
     },
     sbig_control : {
 
-	type : "sbig_control",
+	//type : "sbig_control",
 	name : "SBIG camera",
 	ui_opts : {
 	    child_view_type : "div",
@@ -161,9 +161,6 @@ var nunki_templates = {
 		elements : {
 		}
 	    },
-
-	    
-
 	    control_panel : {
 		name : "SBIG camera", subtitle:"control panel",
 		toolbar : {
@@ -439,7 +436,18 @@ var nunki_templates = {
 
 //<p>The project homepage will be available soon at <a href='http://www.nunki-observatory.net'>www.nunki-observatory.net</a>.</p>",
 
-	toolbar : {},
+	toolbar : {
+	    elements : {
+		file_menu : {
+		    name : "File",
+		    elements : {
+			open : { name : "Open"},
+			load : { name : "Load"},
+			close : { name : "Close"},
+		    }
+		}
+	    }
+	},
 	ui_opts : {
 	    root: true,
 	    child_view_type : "pills",
@@ -449,7 +457,7 @@ var nunki_templates = {
 	    tabs_on_name : true
 	},
 	//name : "Observatory control",
-	tpl_builder : "nunki",
+	//tpl_builder : "nunki",
 	elements : {
 	    sbig :{
 		//type : "string", value : "Hello DB !"

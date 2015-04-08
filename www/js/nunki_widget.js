@@ -10,7 +10,13 @@ template_ui_builders.nunki=function(ui_opts, nunki){
 
     var sbig=nunki.elements.sbig;
 
-
+    //var lognav=nunki.toolbar.create_navbar("navbar-right");
+    var logw=create_widget("login");
+    logw.ui_name.add_class("navbar-link inline");
+    logw.ui_root.add_class("inline");
+    nunki.toolbar.unav.appendChild(logw.ui_root);
+    
+    
   //var browser = nunki.elements.db.elements.browser;
   //browser.glm=glm;
     
@@ -37,15 +43,15 @@ template_ui_builders.message_handler=function(ui_opts, mhd){
 
     mhd.start=function(dialog, dgm, pre_handler){
 	mhd.dgm=dgm;
-	//console.log("MHD START btn = " + btn.name);
+	console.log("MHD START btn = " + btn.name);
 	btn.disable(false);
 	btn.listen("click",function(){
 	    
 	  
 	    btn.disable();
 	    if(è(pre_handler))pre_handler();
-	  //  console.log("MHD CLICK " +JSON.stringify(mhd.dgm));
-
+	    console.log("MHD CLICK " +JSON.stringify(mhd.dgm));
+	    
 	    status.set_alert({ type :"info", content : "Sending datagram..."+JSON.stringify(mhd.dgm) + " dialog " + dialog});
 	    dialog.send_datagram(mhd.dgm,null,function(error){
 		if(error){
@@ -140,6 +146,8 @@ template_ui_builders.sbig_control=function(ui_opts, sbig){
 
     var expo_size={};
     var gl_layer;
+
+    console.log("CONSSYTSGTRST CONNECT !");
     
     server.connect(function(error){
 
@@ -148,6 +156,9 @@ template_ui_builders.sbig_control=function(ui_opts, sbig){
 	}
 	
 	server.listen("socket_connect", function(){
+
+	    
+
 	    
 	    var d= sadira.dialogs.create_dialog({ handler : "nunki.sbig"});
 	    
@@ -238,6 +249,9 @@ template_ui_builders.sbig_control=function(ui_opts, sbig){
 		
 	    });
 	    
+	    
+	    
+
 	    d.connect(function(error, init_dgram){
 		if(error)
 		    return cam_mhd.set_status({type : "error", content : "Init data error= " + error + " init datagram = <pre> " + JSON.stringify(init_dgram,null,4)});
@@ -255,13 +269,14 @@ template_ui_builders.sbig_control=function(ui_opts, sbig){
 		function get_dgm(){return {type : "sbig_request", request_type : cam_online? "shutdown" : "init"};}
 		function get_expo_dgm(){return {type : "sbig_request", request_type : cam_expo? "stop_expo" : "start_expo"};}		    
 		
+		
 		cam_mhd.start(d,get_dgm(),function(){
 		    cam_mhd.dgm=get_dgm();
 		});
 		
 		expo_mhd.start(d, null, function(){
 		    //console.log("Expo data is : " + JSON.stringify(expo_data));
-		    expo_mhd.dgm= {type : "sbig_request", request_type : "set_expo_params", data : build_data_structure(expo_params)};
+		    expo_mhd.dgm= {type : "sbig_request", request_type : "set_expo_params", data : get_template_data(expo_params)};
 		});
 		
 		doexpo_mhd.start(d, null, function(){

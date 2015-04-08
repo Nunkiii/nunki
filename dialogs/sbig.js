@@ -125,7 +125,7 @@ var sbig_cam = function(pkg, app){
     
     cnx.on("message", function (channel, json_message) {
 	var message=JSON.parse(json_message);
-	//console.log("SBIG master: received redis message on channel " + channel + " M: " + json_message);
+	console.log("SBIG master: received redis message on channel " + channel + " M: " + json_message);
 	
 	switch(channel){
 	    
@@ -169,16 +169,16 @@ var sbig_cam = function(pkg, app){
 	    case "set_expo_params":
 		var d=message.data;
 		if(è(message.data))
-		    if(è(message.data.elements)){
-			if(è(message.data.elements.exptime))
-			    if(è(message.data.elements.exptime.value)){
-				sbg.cam.exptime=message.data.elements.exptime.value;
+		    if(è(message.data.els)){
+			if(è(message.data.els.exptime))
+			    if(è(message.data.els.exptime.value)){
+				sbg.cam.exptime=message.data.els.exptime.value;
 			    }
-			if(è(message.data.elements.nexpo))
-			    if(è(message.data.elements.nexpo.value)){
-				sbg.cam.nexpo=message.data.elements.nexpo.value;
+			if(è(message.data.els.nexpo))
+			    if(è(message.data.els.nexpo.value)){
+				sbg.cam.nexpo=message.data.els.nexpo.value;
 			    }
-			pub_message({type : "success", content : "Expo parameters loaded.", id : "expo_params"});
+			pub_message({type : "success", content : "Expo parameters loaded. NE="  + sbg.cam.nexpo + " expt = " + sbg.cam.exptime, id : "expo_params"});
 			break;
 		    }
 		
@@ -191,11 +191,12 @@ var sbig_cam = function(pkg, app){
 		function send_info(m){pub_message({type : "info", content : m, id : "expo_proc"});}
 		function send_error(m){pub_message({type : "error", content : m, id : "expo_proc"});}
 		function send_success(m){pub_message({type : "success", content : m, id : "expo_proc"});}
-
+		
 		
 		
 		//send_info("Start exposure...");
-		
+
+		console.log("START EXPO !!!!!!!");
 		sbg.cam.start_exposure(function (expo_message){
 		    
 		    //return;
@@ -330,12 +331,11 @@ function nunki_sbig (dlg, status_cb){
     /*
       uid=Math.random().toString(36).substring(2);
 	*/
-	    
     
     dlg.listen("sbig_request", function(dgram){
 	var request=dgram.header;
 	var json_request=JSON.stringify(request);
-	//console.log("Sbig : forwarding received client message ["+json_request+"]");
+	console.log("Sbig : forwarding received client message ["+json_request+"]");
 	sbig_cli_master.redis_pubcnx.publish("nunki:sbig:requests",json_request);
     });
 
