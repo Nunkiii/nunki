@@ -19,7 +19,7 @@ var nunki_templates = {
 		    intro_name : true,
 		}
 	    },
-	    d:{
+	    d: {
 		name : "Dimensions",
 		type : "labelled_vector",
 		value_labels : ["Width","Height"],
@@ -441,8 +441,8 @@ var nunki_templates = {
 		file_menu : {
 		    name : "File",
 		    elements : {
-			open : { name : "Open"},
-			load : { name : "Load"},
+			open :  { name : "Open"},
+			load :  { name : "Load"},
 			close : { name : "Close"},
 		    }
 		}

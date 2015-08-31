@@ -11,11 +11,13 @@ template_ui_builders.nunki=function(ui_opts, nunki){
     var sbig=nunki.elements.sbig;
 
     //var lognav=nunki.toolbar.create_navbar("navbar-right");
-    var logw=create_widget("login");
-    logw.ui_name.add_class("navbar-link inline");
-    logw.ui_root.add_class("inline");
+
+  /*
+  var logw=create_widget("login");
+  logw.ui_name.add_class("navbar-link inline");
+  logw.ui_root.add_class("inline");
     nunki.toolbar.unav.appendChild(logw.ui_root);
-    
+    */
     
   //var browser = nunki.elements.db.elements.browser;
   //browser.glm=glm;
