@@ -4,7 +4,7 @@ var nunki_templates = {
     
     rectangle : {
 	name : "Rectangle",
-	intro : "Set up position and dimension",
+	intro : "Origin coordinates and dimensions",
 	ui_opts :  {root_classes : [],child_classes : [], editable : true, edited : false},
 	elements : {
 	    p:{
@@ -53,7 +53,7 @@ var nunki_templates = {
 		elements : {
 		    server : {
 			name : "Mount server",
-			type : "sadira"
+			type : "socket"
 		    },
 		}
 	    },
@@ -199,7 +199,7 @@ var nunki_templates = {
 				name : "Websocket server url",
 				subtitle : "Sadira websocket server",
 				intro : "<p>Address of a Sadira Node.js server participating in the same cluster as at least one SBIG camera server</p><p>Usually, default setting (connecting to the same server as the one serving you these pages) is what you want.</p>",
-				type : "sadira",
+				type : "socket",
 				ui_opts : {
 				    root_classes : ["container-fluid"],
 				    //sliding: true, slided: false//, label : true
@@ -505,9 +505,12 @@ var nunki_templates = {
 };
 
 
-(function(){
-    sadira.listen("ready",function(){
-	console.log("adding nunki templates");
-	tmaster.add_templates(nunki_templates);
-    });
-})();
+module.exports=nunki_templates;
+
+
+// (function(){
+//     sadira.listen("ready",function(){
+// 	console.log("adding nunki templates");
+// 	tmaster.add_templates(nunki_templates);
+//     });
+// })();

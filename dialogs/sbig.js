@@ -36,6 +36,7 @@ var sbig_cli=function(pkg,app){
     var redis = require("../../sadira/node_modules/redis");
     var redis_cnx =scli.redis_cnx=redis.createClient(redis_host_port, redis_host ,{detect_buffers: true});
     var redis_pubcnx = scli.redis_pubcnx=redis.createClient(redis_host_port, redis_host, {detect_buffers: true});
+    //var redis_imgpub= scli.redis_pubcnx=redis.createClient(redis_host_port, redis_host, {return_buffers: true});
     
     new_event(this, "message");
     new_event(this, "image");
@@ -48,7 +49,7 @@ var sbig_cli=function(pkg,app){
 
     redis_cnx.on("message", function (channel, m) {
 	
-	//console.log("SBIG client : received redis message on channel " + channel + " M: " + json_message);
+	//console.log("SBIG client : received redis message on channel " + channel + " M: " + m);
 	
 	switch(channel){
 	    
@@ -61,7 +62,7 @@ var sbig_cli=function(pkg,app){
 	    };
 	    break;
 	case "nunki:sbig:images":
-	    //console.log("Received a " + typeof m + " sz   " + m.byteLength + " l = " + m.length);
+	    console.log("redis client received image type " + typeof m + " sz   " + m.byteLength + " l = " + m.length);
 	    scli.trigger("image", m);
 	    //for(var p in m) console.log("P "+p);
 	    break;
@@ -80,16 +81,30 @@ var sbig_cli=function(pkg,app){
 
 
 var sbig_cam = function(pkg, app){
-
+    
     var sbg=this;
-    var sbig=require("../../node-sbig/build/Release/sbig");
+    var image_count=0;
+    var sbig_driver=pkg.driver;
+    
+    app.log("sbig: Loading driver... ");
+    try{
+	var sbig=require(sbig_driver);
+
+	app.log("sbig: Loading driver... OK ");
+    }
+    catch(err){
+	app.log("Error loading driver : " + err);
+    }
     
     sbg.cam = new sbig.cam();
-/*
+
+    app.log("Starting Master SBIG CAM Props : ");
     for(var e in sbg.cam){
 	console.log("cam prop : " + e);
     }
-*/
+    
+    app.log("Starting Master SBIG CAM Props Done ");
+
     var redis_host=pkg.opts.redis.host;
     var redis_host_port=pkg.opts.redis.port;
 
@@ -106,8 +121,17 @@ var sbig_cam = function(pkg, app){
     }
 
     function pub_image(m){
-	//console.log("publish image" );
-	sbg.redis_pubcnx.publish("nunki:sbig:images", m);
+	//console.log("publish image  orig... " + typeof mm );
+	//var m= new parseFloat(mm);
+	var image_id="image:"+image_count;
+	image_count++;
+
+	pubcnx.set("nunki:sbig:images:"+image_id,  m);
+	pub_message({type : "new_image", id : image_id});
+	
+	console.log("publish image ... " + typeof m  + " L=" + m.length);
+	//sbg.redis_pubcnx.publish("nunki:sbig:images", m);
+	//console.log("publish image ... " + typeof m + " DONE");
     }
 
 
@@ -121,6 +145,8 @@ var sbig_cam = function(pkg, app){
 	app.log("sbig: redis subscribed to channel ["+channel+"]");
 	//client2.publish("a nice channel", "I am sending a message.");
     });
+
+
 
     
     cnx.on("message", function (channel, json_message) {
@@ -205,9 +231,9 @@ var sbig_cam = function(pkg, app){
 
 		    case "new_image":
 
-			var image=expo_message.content;
+			//var image=expo_message.content;
 			
-			//var image=sbg.cam.last_image_float;
+			var image=sbg.cam.last_image_float;
 			
 			send_success("New image ! w= " + image.width() + " h= " + image.height());
 			pub_message({
@@ -226,9 +252,13 @@ var sbig_cam = function(pkg, app){
 			
 			//image.swapx();
 			//image.swapy();
-		
-			pub_image(image.get_data());
-			//console.log("Got data  + " + (typeof data) + " length " + data.length + " bl " + data.byteLength);
+			var data=image.get_data();
+			
+			console.log("Got data  type " + (typeof data) + " length " + data.length + " bl " + data.byteLength);
+			//var ab=data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength);
+			//console.log("Got AB  type " + (typeof ab) + " length " + ab.length + " bl " + ab.byteLength);
+			console.log("Image float data : T "+ typeof data +" L " + data.length + " 0= [" + data.readFloatLE(0) + "]");
+			pub_image(data);
 			break;
 
 		    default:
@@ -259,8 +289,6 @@ var sbig_cam = function(pkg, app){
 	
     });
 
-    
-    
     cnx.subscribe("nunki:sbig:requests");
     
 };
@@ -291,28 +319,27 @@ function nunki_sbig (dlg, status_cb){
 	//
     });
     
-    sbig_cli_master.listen("message", function(m){
-	dlg.send_datagram({ type : "message", data : m});
-    });
 
 
-    sbig_cli_master.listen("image", function(m){
-
+    function send_image(m){
 	
-	//console.log("We have the data buffer serializing... SRZ is  " + typeof SRZ);
+	console.log("We have received the data buffer ! serializing... m type is  " + typeof m + " L " + m.length);
+
+	console.log("CLI Image float data : T "+ typeof m +" L " + m.length + " 0= [" + m[0] + "]");
+
 	//console.log("We have the data buffer serializing... SRZ is  " + typeof SRZ.srz_mem);
-	
+
 	var srep=new SRZ.srz_mem(m);
 	
-	//console.log("Filling header .. DATA length is " + m.length);
+	console.log("Filling header .. DATA length is " + m.length);
 	
 	srep.header={sz : m.length, name : "SBIG raw float image"};
 	//srep.header={width : 512, height: 512 };
 			
-	//console.log("SRZ configured size= " + srep.size());
+	console.log("SRZ configured size= " + srep.size());
 	
 	srep.on_done=function(){
-	    //console.log("Image data sent!");
+	    console.log("Image data sent!");
 	    //dlg.close();
 	};
 	
@@ -326,11 +353,13 @@ function nunki_sbig (dlg, status_cb){
 	//console.log("serializing call done...");
 	
 	
-    });
+    }
     
     /*
       uid=Math.random().toString(36).substring(2);
-	*/
+    */
+
+
     
     dlg.listen("sbig_request", function(dgram){
 	var request=dgram.header;
@@ -342,7 +371,24 @@ function nunki_sbig (dlg, status_cb){
     dlg.listen("disconnect", function (dgram){
 	//console.log("dialog disconnect");
     });
-    
+
+
+    sbig_cli_master.listen("message", function(m){
+	switch(m.type){
+	case "new_image":
+	    sbig_cli_master.redis_pubcnx.get(new Buffer("nunki:sbig:images:"+m.id), function(err, im){
+		
+		send_image(im);
+	    });
+	    break;
+	default:
+	    dlg.send_datagram({ type : "message", data : m});
+	    break;
+	    
+	}
+	
+    });
+
     
     status_cb();
 

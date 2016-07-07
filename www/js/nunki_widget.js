@@ -2,7 +2,9 @@
 
 //alert("Abraacadabra!");
 
-var BSON=bson().BSON;
+//var BSON=bson().BSON;
+
+var template_ui_builders={};
 
 template_ui_builders.nunki=function(ui_opts, nunki){
 
@@ -521,3 +523,4 @@ template_ui_builders.sbig_control=function(ui_opts, sbig){
 }
 
 
+module.exports=template_ui_builders;
